@@ -19,15 +19,32 @@ struct BoardCoordinate {
   3是食物
   */
 class Board {
+  private:
+    /*
+       0是空气
+       1是墙壁
+       2是蛇头
+       3是蛇
+       4是食物
+       */
+    enum Board_state {
+      Air,
+      Wall,
+      Snake_head,
+      Snake_body,
+      Food
+    };
+
+    Board_state board_state; 
+    int _width, _height;
+    std::vector<std::vector<Board_state>> _boardMap;
+
 public:
   // 根据传递进来的值设置地图的宽和高
   Board(int , int);
   // 获取某个坐标的值
   int getCell(BoardCoordinate);
-  int setCell(BoardCoordinate, int cell);
+  int setCell(BoardCoordinate, Board_state cell);
   void draw();
 
-private:
-  int _width, _height;
-  std::vector<std::vector<int>> _boardMap;
 };
