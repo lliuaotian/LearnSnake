@@ -37,10 +37,10 @@ int Board::getCell(BoardCoordinate coordinate) {
 void Board::draw() {
   for (int i = 0; i < _boardMap.size(); ++i) {
     for (int j = 0; j < _boardMap[i].size(); ++j) {
-      if (_boardMap[i][j] == 0) {
+      if (_boardMap[i][j] == Air) {
         std::cout << "  ";
       }
-      if (_boardMap[i][j] == 1) {
+      if (_boardMap[i][j] == Wall) {
         std::cout << "##";
       }
     }
