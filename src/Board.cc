@@ -11,7 +11,7 @@ Board::Board(int width, int height)
   for (int i = 0; i < _boardMap.size(); ++i) {
     for (int j = 0; j < _boardMap[i].size(); ++j) {
       if (i == 0 or i == _boardMap.size() - 1) {
-        _boardMap[i][j] = Air;
+        _boardMap[i][j] = Wall;
         continue;
       }
       if (j == 0 or j == _boardMap[i].size() - 1) {
@@ -24,7 +24,7 @@ Board::Board(int width, int height)
 
 int Board::setCell(BoardCoordinate coordinate, Board_state cell) {
   // 留个接口，万一以后这个函数很麻烦 return的int类型可以判断状态
-  _boardMap[coordinate.x - 1][coordinate.y - 1] = cell;
+  _boardMap[coordinate.x][coordinate.y] = cell;
   return 0;
 }
 
@@ -35,12 +35,7 @@ int Board::getCell(BoardCoordinate coordinate) {
 void Board::draw() {
   for (int i = 0; i < _boardMap.size(); ++i) {
     for (int j = 0; j < _boardMap[i].size(); ++j) {
-      if (_boardMap[i][j] == Air) {
-        std::cout << "  ";
-      }
-      if (_boardMap[i][j] == Wall) {
-        std::cout << "##";
-      }
+      std::cout << board_state_to_char.find(_boardMap[i][j])->second;
     }
     std::cout << std::endl;
   }
