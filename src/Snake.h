@@ -6,6 +6,8 @@
 #include <deque>
 #include <unordered_map>
 #include <utility>
+#include "./Board.h"
+#include "Input.h"
 
 // 此处固定一个游戏的范围，随后可以通过其他方式获取这个范围，动态调整
 
@@ -23,11 +25,28 @@ private:
 
   // snake
   std::deque<std::pair<int, int>> snake;
+  std::pair<int, int> getNewHead();
+  Board_state checkCollision(std::pair<int, int>);
+
+  // Board
+  Board board;
+  
+  // getch
+  Input input;
+
+
 
 public:
   Snake();
+  // 该函数控制贪吃蛇移动，返回1就是退出 -1就是输入错误
+  // 返回0就是正常移动
   int Move();
+  /*
+   * 把贪吃蛇队列输出到屏幕中
+   */
+  void DrawBoard();
+  void getDirection();
   ~Snake();
 };
 
-// NOTE::下一步实现一个Draw 让Snake可以输出到棋盘中
+// NOTE:碰撞测试
