@@ -1,6 +1,7 @@
 #include "Board.h"
 #include <iostream>
 #include <vector>
+#include <cstdlib>
 
 // width+2 height+2 是因为棋盘的第一行、列 最后一行、列是墙壁
 Board::Board(int width, int height)
@@ -22,20 +23,21 @@ Board::Board(int width, int height)
   }
 }
 
-int Board::setCell(BoardCoordinate coordinate, Board_state cell) {
+int Board::setCell(std::pair<int, int> coordinate, Board_state cell) {
   // 留个接口，万一以后这个函数很麻烦 return的int类型可以判断状态
-  _boardMap[coordinate.x][coordinate.y] = cell;
+  _boardMap[coordinate.first][coordinate.second] = cell;
   return 0;
 }
 
-int Board::getCell(BoardCoordinate coordinate) {
-  return _boardMap[coordinate.x - 1][coordinate.y - 1];
+int Board::getCell(std::pair<int, int> coordinate) {
+  return _boardMap[coordinate.first][coordinate.second];
 }
 
 void Board::draw() {
+  system("clear");
   for (int i = 0; i < _boardMap.size(); ++i) {
     for (int j = 0; j < _boardMap[i].size(); ++j) {
-      std::cout << board_state_to_char.find(_boardMap[i][j])->second;
+      std::cout << board_state_to_char.find(_boardMap[j][i])->second;
     }
     std::cout << std::endl;
   }

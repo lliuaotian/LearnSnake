@@ -2,11 +2,13 @@
 
 #include <map>
 #include <vector>
+#include <utility>
 
 // 共用的Board坐标系
-struct BoardCoordinate {
-  int x, y;
-};
+// 使用pair代替
+// struct BoardCoordinate {
+//   int x, y;
+// };
 
 /*
   Board创建一个棋盘
@@ -39,7 +41,7 @@ public:
   // 根据传递进来的值设置地图的宽和高
   Board(int, int);
   // 获取某个坐标的值
-  int getCell(BoardCoordinate);
-  int setCell(BoardCoordinate, Board_state cell);
+  int getCell(std::pair<int, int>);
+  int setCell(std::pair<int, int>, Board_state cell);
   void draw();
 };
