@@ -42,3 +42,18 @@ void Board::draw() {
     std::cout << std::endl;
   }
 }
+
+std::vector<std::pair<int, int>> Board::getAirList(){
+  // 返回当前的所有空气的坐标
+  std::vector<std::pair<int, int>> airList;
+  for (int i = 1; i < _boardMap.size()-1; ++i) {
+    for (int j = 1; j < _boardMap[j].size()-1; ++j) {
+      if (_boardMap[i][j] == Air) {
+        airList.push_back({i, j});
+      }
+    }
+  }
+
+  return airList;
+}
+
