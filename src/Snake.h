@@ -8,6 +8,7 @@
 #include <utility>
 #include "./Board.h"
 #include "Input.h"
+#include "./Food.h"
 
 // 此处固定一个游戏的范围，随后可以通过其他方式获取这个范围，动态调整
 
@@ -33,6 +34,8 @@ private:
   
   // getch
   Input input;
+
+  FFood food;
 
 
 

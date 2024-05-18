@@ -21,6 +21,7 @@ Snake::Snake() : board(gamewidth, gameheight) {
   directions['q'] = { 0, 0 };
 
   board.setCell(snake.front(), Snake_head);
+  food.AddFood(board);
 }
 
 // 从键盘获取输入只返回第一个字符
@@ -64,13 +65,13 @@ Board_state Snake::checkCollision(std::pair<int, int> new_head) {
         new_head.first = gamewidth;
         break;
       case 'd':
-        new_head.first = 0;
+        new_head.first = 1;
         break;
       case 'w':
         new_head.second = gameheight;
         break;
       case 's':
-        new_head.second = 0;
+        new_head.second = 1;
         break;
     }
 
@@ -96,8 +97,10 @@ Board_state Snake::checkCollision(std::pair<int, int> new_head) {
   }
 
   // 如果不是食物 不是墙壁 那就是空气了
-  snake.push_front(new_head);
   board.setCell(new_head, Snake_head);
+  // 这里少一个更改上一个头部的状态
+  board.setCell(snake.front(), Snake_body);
+  snake.push_front(new_head);
   board.setCell(snake.back(), Air);
   snake.pop_back(); 
 
@@ -122,9 +125,14 @@ int Snake::Move() {
   std::pair<int, int> new_head = getNewHead();
   Board_state check = checkCollision(new_head);
 
+  if (check == Food) {
+    food.AddFood(board);
+  }
+
   return 0;
 }
 
 void Snake::DrawBoard(){
   board.draw();
+
 }
