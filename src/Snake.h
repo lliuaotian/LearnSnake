@@ -35,8 +35,13 @@ private:
   // getch
   Input input;
 
+  // 食物生成
   FFood food;
+  
+  // 检查输入
+  int checkInput();
 
+  void GameOver();
 
 
 public:

@@ -2,6 +2,7 @@
 #include "Board.h"
 #include "Input.h"
 // DEBUG:
+#include <cstdlib>
 #include <iostream>
 
 // NOTE: 过滤掉无效输入，譬如在方向a的情况下肯定不能b
@@ -36,7 +37,7 @@ void Snake::getDirection() {
     return;
   }
   // DEBUG:
-  std::cout << "Hello :" << buf[0] << std::endl;
+  std::cout << "Input :" << buf[0] << std::endl;
   direction = buf[0];
 }
 
@@ -107,12 +108,25 @@ Board_state Snake::checkCollision(std::pair<int, int> new_head) {
   return Air;
 }
 
-int Snake::Move() {
-  // 控制Snake移动
-  // get current position
+int Snake::checkInput() {
+  char direction_old = direction;
   getDirection();
+  
+  std::unordered_map<char, char> disallowedDirections = {
+    { 'a', 'b' },
+    { 'd', 'a' },
+    { 'w', 's' },
+    { 's', 'w' }
+  };
+
+  auto it = disallowedDirections.find(direction_old);
+  if (it != disallowedDirections.end() and it->second == direction) {
+    // 过滤无效的内容
+    return 0;
+  }
 
   if (direction == 'q') {
+    GameOver();
     return 1; 
   }
 
@@ -120,7 +134,35 @@ int Snake::Move() {
     // 如果找到末尾也没找到元素 就退出，肯定是错误输入
     return -1;
   }
+
+  return 0;
+}
+
+void Snake::GameOver() {
+  // 游戏结束在这里显示
   // 
+  system("clear");
+  std::cout << R"( $$$$$$\                                           $$$$$$\                                 )" << std::endl;
+  std::cout << R"($$  __$$\                                         $$  __$$\                                )" << std::endl;
+  std::cout << R"($$ /  \__| $$$$$$\  $$$$$$\$$$$\   $$$$$$\        $$ /  $$ |$$\    $$\  $$$$$$\   $$$$$$\  )" << std::endl;
+  std::cout << R"($$ |$$$$\  \____$$\ $$  _$$  _$$\ $$  __$$\       $$ |  $$ |\$$\  $$  |$$  __$$\ $$  __$$\ )" << std::endl;
+  std::cout << R"($$ |\_$$ | $$$$$$$ |$$ / $$ / $$ |$$$$$$$$ |      $$ |  $$ | \$$\$$  / $$$$$$$$ |$$ |  \__|)" << std::endl;
+  std::cout << R"($$ |  $$ |$$  __$$ |$$ | $$ | $$ |$$   ____|      $$ |  $$ |  \$$$  /  $$   ____|$$ |      )" << std::endl;
+  std::cout << R"(\$$$$$$  |\$$$$$$$ |$$ | $$ | $$ |\$$$$$$$\        $$$$$$  |   \$  /   \$$$$$$$\ $$ |      )" << std::endl;
+  std::cout << R"( \______/  \_______|\__| \__| \__| \_______|       \______/     \_/     \_______|\__|      )" << std::endl;
+  std::cout << "                               你当前的分数是：" << 10 << std::endl;
+  std::cout << "                             你共计游戏时间是:" << 10 << std::endl;
+}
+
+int Snake::Move() {
+  // 控制Snake移动
+  // get current position
+  
+  // Input && check input
+  int a = checkInput();
+  if (a != 0) {
+    return -1;
+  }
   
   std::pair<int, int> new_head = getNewHead();
   Board_state check = checkCollision(new_head);
