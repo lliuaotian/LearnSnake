@@ -33,8 +33,8 @@ private:
   int _width, _height;
   std::vector<std::vector<Board_state>> _boardMap;
   std::map<Board_state, const char *> board_state_to_char = {
-      {Air, "  "},        {Wall, "欣"}, {Snake_head, "青"},
-      {Snake_body, "静"}, {Food, "里"},
+      {Air, "  "},        {Wall, "##"}, {Snake_head, "@@"},
+      {Snake_body, "**"}, {Food, "☆☆"},
   };
 
 public:

@@ -23,6 +23,9 @@ Snake::Snake() : board(gamewidth, gameheight) {
 
   board.setCell(snake.front(), Snake_head);
   food.AddFood(board);
+
+  _gameover = true;
+  fraction = 0;
 }
 
 // 从键盘获取输入只返回第一个字符
@@ -37,7 +40,7 @@ void Snake::getDirection() {
     return;
   }
   // DEBUG:
-  std::cout << "Input :" << buf[0] << std::endl;
+  // std::cout << "Input :" << buf[0] << std::endl;
   direction = buf[0];
 }
 
@@ -52,8 +55,8 @@ std::pair<int, int> Snake::getNewHead() {
   auto move_direction = it->second;
   std::pair<int, int> new_head = {current_head.first + move_direction.first, current_head.second + move_direction.second };
   // DEBUG:
-  std::cout << "current_xy: " << current_head.first << "  " << current_head.second << std::endl;
-  std::cout << "new_head_xy: " << new_head.first << "  " << new_head.second << std::endl;
+  // std::cout << "current_xy: " << current_head.first << "  " << current_head.second << std::endl;
+  // std::cout << "new_head_xy: " << new_head.first << "  " << new_head.second << std::endl;
 
   return new_head;
 }
@@ -94,7 +97,7 @@ Board_state Snake::checkCollision(std::pair<int, int> new_head) {
 
   // 如果是碰到自己
   if(board.getCell(new_head) == Snake_body) {
-    // GameOver
+    GameOver();
   }
 
   // 如果不是食物 不是墙壁 那就是空气了
@@ -112,23 +115,24 @@ int Snake::checkInput() {
   char direction_old = direction;
   getDirection();
   
+  if (direction == 'q') {
+    GameOver();
+    return 1; 
+  }
   std::unordered_map<char, char> disallowedDirections = {
-    { 'a', 'b' },
+    { 'a', 'd' },
     { 'd', 'a' },
     { 'w', 's' },
     { 's', 'w' }
   };
 
-  auto it = disallowedDirections.find(direction_old);
-  if (it != disallowedDirections.end() and it->second == direction) {
+  auto it = disallowedDirections.find(direction);
+  if (it != disallowedDirections.end() and it->second == direction_old) {
     // 过滤无效的内容
+    direction = direction_old;
     return 0;
   }
 
-  if (direction == 'q') {
-    GameOver();
-    return 1; 
-  }
 
   if (directions.find(direction) == directions.end()) {
     // 如果找到末尾也没找到元素 就退出，肯定是错误输入
@@ -150,8 +154,11 @@ void Snake::GameOver() {
   std::cout << R"($$ |  $$ |$$  __$$ |$$ | $$ | $$ |$$   ____|      $$ |  $$ |  \$$$  /  $$   ____|$$ |      )" << std::endl;
   std::cout << R"(\$$$$$$  |\$$$$$$$ |$$ | $$ | $$ |\$$$$$$$\        $$$$$$  |   \$  /   \$$$$$$$\ $$ |      )" << std::endl;
   std::cout << R"( \______/  \_______|\__| \__| \__| \_______|       \______/     \_/     \_______|\__|      )" << std::endl;
-  std::cout << "                               你当前的分数是：" << 10 << std::endl;
-  std::cout << "                             你共计游戏时间是:" << 10 << std::endl;
+  std::cout << "                             最高分数的分数是：" << fraction << std::endl;
+  std::cout << "                            你此次的游戏时间是:" << 10 << std::endl;
+
+  // 游戏结束
+  _gameover = false;
 }
 
 int Snake::Move() {
@@ -168,6 +175,7 @@ int Snake::Move() {
   Board_state check = checkCollision(new_head);
 
   if (check == Food) {
+    fraction += 20;
     food.AddFood(board);
   }
 
@@ -176,5 +184,13 @@ int Snake::Move() {
 
 void Snake::DrawBoard(){
   board.draw();
+  std::cout << "你当前的分数是：" << fraction << std::endl;
+}
 
+bool Snake::_while(){
+  if (_gameover) {
+    return true;
+  }
+
+  return false;
 }

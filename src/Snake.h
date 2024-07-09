@@ -43,6 +43,10 @@ private:
 
   void GameOver();
 
+  bool _gameover;
+
+  int fraction;
+
 
 public:
   Snake();
@@ -54,6 +58,7 @@ public:
    */
   void DrawBoard();
   void getDirection();
+  bool _while();
   ~Snake();
 };
 

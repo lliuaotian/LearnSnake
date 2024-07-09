@@ -6,7 +6,7 @@ int main(void) {
   Snake snake;
 
   // 中断两秒
-  while (true) {
+  while (snake._while()) {
 
     snake.DrawBoard();
     snake.Move();

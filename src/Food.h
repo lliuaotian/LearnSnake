@@ -6,9 +6,12 @@
 class FFood {
 public:
   void AddFood(Board& board);
-
+  int GetNumber();
+  
 
 private:
+  int airrandom;
+  std::vector<std::pair<int, int>> airList;
   
 };
 
